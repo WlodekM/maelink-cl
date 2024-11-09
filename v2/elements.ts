@@ -3,7 +3,7 @@ import { type Key } from 'node:readline';
 import { type Screen } from "./screen.ts";
 
 export abstract class Element {
-    override focusable: boolean = false;
+    focusable: boolean = false;
     focused: boolean = false;
     // screen property is asigned by the addElement function of Scren
     //@ts-ignore
