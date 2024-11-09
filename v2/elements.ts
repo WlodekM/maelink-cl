@@ -27,6 +27,8 @@ export class Input extends Element {
     focusable: boolean = true;
     value: string = "";
 
+    br = false;
+
     isPassword: boolean = false;
 
     render(): void {
@@ -53,24 +55,36 @@ export class Input extends Element {
                     this.value = prevValue.substring(0, prevValue.length - 1)
                     break;
             }
+            this.screen.render()
             return;
         }
         if (!key.sequence || key.sequence.length > 1 || key.name != key.sequence?.toLowerCase()) return;
         this.value += key.sequence;
+        this.screen.render()
     }
 
-    constructor(isPassword: boolean, ) {
+    constructor(isPassword: boolean = false, br: boolean = false) {
         super()
+        this.br = br
         this.isPassword = isPassword
     }
 }
 
 export class Button extends Text {
     focusable: boolean = true;
-    constructor (text: string) {
-        super(text)
+    onclick: ()=>void;
+    constructor (text: string, onclick=()=>{}) {
+        super(text);
+        this.onclick = onclick
     }
     render(): void {
         console.log(`(${(this.focused ? chalk.bgWhite : (a:string)=>a)(this.text)})`)
+    }
+
+    onkeypres(key: Key): void {
+        //@ts-ignore
+        if (["return", "space"].includes(key.name)) {
+            this.onclick.call(this.screen)
+        }
     }
 }

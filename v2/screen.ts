@@ -17,6 +17,7 @@ export class Screen {
     elements: Map<string, Element> = new Map<string, Element>();
     name: string;
     focusedElementId: string = '';
+    logs = logs
 
     constructor(name: string) {
         this.name = name;
@@ -45,7 +46,6 @@ export class Screen {
         if (!screen.focusedElementId) return;
         const focusedElement = screen.getFocusedElement();
         focusedElement?.onkeypres(key)
-        this.render()
     }
 
     getKeypressHandler(screen: Screen) {
