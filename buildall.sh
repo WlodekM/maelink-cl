@@ -1,5 +1,9 @@
 echo "Welcome to the meower CL build script"
 
+echo "removing build folder if there already is a build there"
+
+rm -r build/*
+
 echo "Building windows..."
 deno task build-win
 

@@ -18,7 +18,7 @@ export default {
                 splitText = splitText.map(t => t.replace(new RegExp(`([^]){${termWidth}}`, "g"),"$1\n"));
                 splitText = splitText.join("\n").split("\n")
 
-                splitText = splitText.slice(-(termHeight - inputValueHeight - 1));
+                splitText = splitText.slice(-(termHeight - inputValueHeight));
 
                 return splitText.join("\n")
             }]
