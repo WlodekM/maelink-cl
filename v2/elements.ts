@@ -14,7 +14,8 @@ export abstract class Element {
 
 export class Text extends Element {
     text: string;
-    constructor(text: string) {
+    br: boolean;
+    constructor(text: string, br = false) {
         super();
         this.text = text;
     }
@@ -23,10 +24,33 @@ export class Text extends Element {
     }
 }
 
+export class HR extends Element {
+    constructor() {
+        super()
+    }
+    render(): void {
+        console.log('-'.repeat(process.stdout.columns))
+    }
+}
+
+export class BR extends Element {
+    constructor() {
+        super()
+    }
+    render(): void {
+        console.log()
+    }
+}
+
 export class Input extends Element {
     focusable: boolean = true;
     value: string = "";
 
+    height: number = 1;
+    heightOffser: number = 1;
+    grow: number = 1;
+
+    textarea = false;
     br = false;
 
     isPassword: boolean = false;
@@ -35,7 +59,7 @@ export class Input extends Element {
         let text = this.value
         if (this.isPassword) text = text.replace(/[^]/g, '*');
         if (this.focused) text += "_"
-        console.log(text)
+        process.stdout.write(text)
     }
 
     onkeypres(key: Key): void {
@@ -43,10 +67,14 @@ export class Input extends Element {
         if (key.meta || key.code || ["return", "backspace"].includes(key.name)) {
             switch (key.name) {
                 case "return":
+                    if(this.textarea) {
+                        this.value += '\n'
+                        break;
+                    }
                     this.focused = false;
                     const focusableIDs = Object.keys(this.screen.getFocusable());
                     const focusedIndex = focusableIDs.indexOf(this.screen.focusedElementId);
-                    this.screen.focus(focusableIDs[(focusedIndex - 1) % focusableIDs.length]);
+                    this.screen.focus(focusableIDs[(focusedIndex + 1) % focusableIDs.length]);
                     break;
                 
                 case "backspace":
@@ -58,15 +86,24 @@ export class Input extends Element {
             this.screen.render()
             return;
         }
-        if (!key.sequence || key.sequence.length > 1 || key.name != key.sequence?.toLowerCase()) return;
+	// check if the character ism't typable
+	// checks:
+	// sequience length > 1 (eg ^[ ^[[A)
+	// key name != sequence (and if name exists)
+        //@ts-ignore
+        if (!key.sequence || key.sequence.length > 1 || key.name != key.sequence?.toLowerCase() && !["space"].includes(key.name) && key.name) return;
         this.value += key.sequence;
         this.screen.render()
     }
 
-    constructor(isPassword: boolean = false, br: boolean = false) {
+    constructor(isPassword: boolean = false, br: boolean = false, textarea: boolean = false, height: number = 1, heightOffset: boolean = false, grow: boolean = false) {
         super()
         this.br = br
-        this.isPassword = isPassword
+        this.isPassword = isPassword;
+        this.textarea = textarea;
+	this.height = height;
+	this.heightOffset = heightOffset;
+	this.grow = grow;
     }
 }
 
@@ -78,7 +115,7 @@ export class Button extends Text {
         this.onclick = onclick
     }
     render(): void {
-        console.log(`(${(this.focused ? chalk.bgWhite : (a:string)=>a)(this.text)})`)
+        process.stdout.write(`(${(this.focused ? chalk.bgWhite : (a:string)=>a)(this.text)})`)
     }
 
     onkeypres(key: Key): void {

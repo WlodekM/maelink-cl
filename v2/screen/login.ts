@@ -17,6 +17,10 @@ export default {
             data: [false]
         },
         {
+            type: ElemType.BR,
+            id: 'naoiuou'
+        },
+        {
             type: ElemType.TextElem,
             id: 'password-label',
             data: ["Password: \n"]
@@ -27,9 +31,14 @@ export default {
             data: [true]
         },
         {
+            type: ElemType.BR,
+            id: 'faij0ifsj'
+        },
+        {
             type: ElemType.ButtonElem,
             id: 'done-btn',
             data: ["Done", async function (this: Screen) {
+                client.setScreen(this)
                 this.off()
                 this.logs.push(`clicked button`)
                 console.clear()

@@ -1,4 +1,4 @@
-import type { Element } from "./elements.ts"
+import type { Element, Input, Text, Button } from "./elements.ts"
 import readline from 'node:readline';
 
 readline.emitKeypressEvents(process.stdin);
@@ -14,13 +14,19 @@ function onexit() {
 }
 
 export class Screen {
-    elements: Map<string, Element> = new Map<string, Element>();
+    elements: Map<string, Element|Input|Text|Button> = new Map();
     name: string;
     focusedElementId: string = '';
     logs = logs
 
     constructor(name: string) {
         this.name = name;
+    }
+
+    call(function_name:string, ...args:any) {
+        for (const element of this.elements) {
+            element[1][function_name](...args)
+        }
     }
 
     handleKeypress(chunk: any, key: any, screen: Screen) {
@@ -52,13 +58,15 @@ export class Screen {
         return (chunk: any, key: any) => this.handleKeypress(chunk,key, screen);
     }
 
+    keypressHandler = this.getKeypressHandler(this)
+
     ready() {
-        process.stdin.on('keypress', this.getKeypressHandler(this));
+        process.stdin.on('keypress', this.keypressHandler);
         this.render()
     }
 
     off() {
-        process.stdin.off('keypress', this.getKeypressHandler(this))
+        process.stdin.off('keypress', this.keypressHandler)
     }
 
     addElement(name: string, element: Element) {
