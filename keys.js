@@ -1,3 +1,5 @@
+// util for figuring out key stuff
+// run this, press a key, and it'll give you the json :+1:
 import readline from 'node:readline';
 
 readline.emitKeypressEvents(process.stdin);

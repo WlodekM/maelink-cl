@@ -1,7 +1,4 @@
 import type { Element, Input, Text, Button } from "./elements.ts"
-import readline from 'node:readline';
-
-readline.emitKeypressEvents(process.stdin);
 
 const logs: string[] = [];
 
@@ -32,7 +29,7 @@ export class Screen {
     handleKeypress(chunk: any, key: any, screen: Screen) {
         const focusableIDs = Object.keys(screen.getFocusable());
         const focusedIndex = focusableIDs.indexOf(screen.focusedElementId);
-        if (key && key.name == 'escape') {
+        if (key && key.name == 'escape' || key.name == "c" && key.ctrl) {
             onexit();
             process.exit();
         }
@@ -101,5 +98,3 @@ export class Screen {
         return this.focusedElementId ? this.elements.get(this.focusedElementId) as Element : undefined
     }
 }
-
-if (process.stdin.isTTY) process.stdin.setRawMode(true); // makes the terminal send stdin without the user pressing enter
