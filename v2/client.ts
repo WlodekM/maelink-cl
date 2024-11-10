@@ -32,13 +32,13 @@ export async function login(username: string, password: string) {
     screen.logs.push(`Got token ${token}`);
     connection.addEventListener("message", (ev) => {
         const data = JSON.parse(ev.data.toString());
-	screen.logs.push("INC: " + JSON.stringify(data))
-	if(data.cmd != "post") return;
-	home.push(data.val)
-	const textHome: string[] = home.map(p => `[${strftime("%H:%M:%S")}] ${p.u}: ${p.p}`);
+        screen.logs.push("INC: " + JSON.stringify(data))
+        if(data.cmd != "post") return;
+        home.push(data.val)
+        const textHome: string[] = home.map(p => `[${strftime("%H:%M:%S")}] ${p.u}: ${p.p}`);
         const homeElem: Text = screen.elements.get("home") as Text;
         homeElem.text = textHome.join("\n")+"\n";
-	screen.render()	
+        screen.render()        
     })
 }
 
