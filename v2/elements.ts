@@ -15,12 +15,16 @@ export abstract class Element {
 export class Text extends Element {
     text: string;
     br: boolean;
-    constructor(text: string, br = false) {
+
+    processText: (text: string) => string;
+
+    constructor(text: string, processText = (t:string)=>t) {
         super();
         this.text = text;
+        this.processText = processText
     }
     render() {
-        process.stdout.write(this.text)
+        process.stdout.write(this.processText(this.text))
     }
 }
 
@@ -45,10 +49,6 @@ export class BR extends Element {
 export class Input extends Element {
     focusable: boolean = true;
     value: string = "";
-
-    height: number = 1;
-    heightOffser: number = 1;
-    grow: number = 1;
 
     textarea = false;
     br = false;
@@ -96,14 +96,11 @@ export class Input extends Element {
         this.screen.render()
     }
 
-    constructor(isPassword: boolean = false, br: boolean = false, textarea: boolean = false, height: number = 1, heightOffset: boolean = false, grow: boolean = false) {
+    constructor(isPassword: boolean = false, br: boolean = false, textarea: boolean = false) {
         super()
         this.br = br
         this.isPassword = isPassword;
         this.textarea = textarea;
-	this.height = height;
-	this.heightOffset = heightOffset;
-	this.grow = grow;
     }
 }
 

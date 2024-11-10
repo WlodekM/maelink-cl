@@ -1,6 +1,6 @@
 import { ElemType } from "../screenbuilder.ts";
 import { Screen } from "../screen.ts";
-import type { Input } from "../elements.ts";
+import type { Input, Element, Text } from "../elements.ts";
 import * as client from "../client.ts"
 
 export default {
@@ -8,7 +8,20 @@ export default {
         {
             type: ElemType.TextElem,
             id: 'home',
-            data: ["Loading home posts...\n"]
+            data: ["Loading home posts...\n", function (this: Text, text: string) {
+                const msgInput: Input = this.screen.elements.get("msg-input") as Input;
+                const inputValueHeight = msgInput.value.split("\n").length + 1;
+                const termHeight = process.stdout.rows;
+                const termWidth  = process.stdout.columns;
+
+                let splitText = this.text.split("\n");
+                splitText = splitText.map(t => t.replace(new RegExp(`([^]){${termWidth}}`, "g"),"$1\n"));
+                splitText = splitText.join("\n").split("\n")
+
+                splitText = splitText.slice(-(termHeight - inputValueHeight - 1));
+
+                return splitText.join("\n")
+            }]
         },
         {
             type: ElemType.HR,

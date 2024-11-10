@@ -74,6 +74,7 @@ export class Screen {
 
     render() {
         console.clear()
+        process.stdout.write("\e[2J") // use an ansi escape code to clear the screen if console.clear doesn't clear fully
         this.elements.forEach(element => {
             element.render()
         });

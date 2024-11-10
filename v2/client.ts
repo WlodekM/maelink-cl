@@ -34,7 +34,7 @@ export async function login(username: string, password: string) {
         const data = JSON.parse(ev.data.toString());
         screen.logs.push("INC: " + JSON.stringify(data))
         if(data.cmd != "post") return;
-        home.push(data.val)
+        home.push(data.val);
         const textHome: string[] = home.map(p => `[${strftime("%H:%M:%S")}] ${p.u}: ${p.p}`);
         const homeElem: Text = screen.elements.get("home") as Text;
         homeElem.text = textHome.join("\n")+"\n";
@@ -47,10 +47,12 @@ export async function loadHome(screen: Screen) {
     const textHome: string[] = home.map(p => `[${strftime("%H:%M:%S")}] ${p.u}: ${p.p}`);
     const homeElem: Text = screen.elements.get("home") as Text;
     homeElem.text = textHome.join("\n")+"\n";
+    screen.logs.push("loadHome ran", home.length.toString())
     screen.render()
 }
 
 export async function sendHome(post:string) {
+    screen.logs.push("sendHome ran", home.length.toString())
     fetch("https://api.meower.org/home", {
         method: "POST",
         headers: {
