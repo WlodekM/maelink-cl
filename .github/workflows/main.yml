@@ -46,5 +46,8 @@ jobs:
       with:
         files: build/compressed/*  # Upload the files to the GitHub release
         tag_name: ${{ github.ref }}  # Use the pushed tag as the release version
-        name: Release ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
         body: "Automated release for version ${{ github.ref }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # Use the personal access token here
+
