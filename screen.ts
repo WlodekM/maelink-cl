@@ -1,4 +1,8 @@
+// deno-lint-ignore-file no-process-globals ban-ts-comment no-explicit-any
+// ^ problem solved
+import { Key } from "node:readline";
 import type { Element, Input, Text, Button } from "./elements.ts"
+import { Buffer } from "node:buffer";
 
 const logs: string[] = [];
 
@@ -22,24 +26,25 @@ export class Screen {
 
     call(function_name:string, ...args:any) {
         for (const element of this.elements) {
+            //@ts-ignore
             element[1][function_name](...args)
         }
     }
 
-    handleKeypress(chunk: any, key: any, screen: Screen) {
+    handleKeypress(_chunk: Buffer, key: Key, screen: Screen) {
         const focusableIDs = Object.keys(screen.getFocusable());
         const focusedIndex = focusableIDs.indexOf(screen.focusedElementId);
         if (key && key.name == 'escape' || key.name == "c" && key.ctrl) {
             onexit();
-            process.exit();
+            Deno.exit(0);
         }
         
-        if (['up', 'left'].includes(key.name) || key.name == "tab" && key.shift) {
+        if (['up', 'left'].includes(key.name ?? '') || key.name == "tab" && key.shift) {
             // logs.push(`Got up key, moving focus upward ${focusedIndex} ${(focusedIndex - 1) % focusableIDs.length}`)
             screen.focus(focusableIDs[(focusedIndex - 1) % focusableIDs.length]);
             return screen.render()
         }
-        if (['down', 'right'].includes(key.name) || key.name == "tab" && !key.shift) {
+        if (['down', 'right'].includes(key.name ?? '') || key.name == "tab" && !key.shift) {
             // logs.push(`Got down key, moving focus downward ${focusedIndex} ${(focusedIndex + 1) % focusableIDs.length}`)
             screen.focus(focusableIDs[(focusedIndex + 1) % focusableIDs.length]);
             return screen.render()
@@ -52,7 +57,7 @@ export class Screen {
     }
 
     getKeypressHandler(screen: Screen) {
-        return (chunk: any, key: any) => this.handleKeypress(chunk,key, screen);
+        return (chunk: Buffer, key: Key) => this.handleKeypress(chunk,key, screen);
     }
 
     keypressHandler = this.getKeypressHandler(this)
@@ -81,7 +86,7 @@ export class Screen {
     }
 
     getFocusable() {
-        return Object.fromEntries([...this.elements.entries()].filter(([k, v]) => v.focusable))
+        return Object.fromEntries([...this.elements.entries()].filter(([_k, v]) => v.focusable))
     }
 
     getElements() {

@@ -1,5 +1,6 @@
-import LoginScreen from "./v2/screen/login.ts";
-import { build } from "./v2/screenbuilder.ts";
+// deno-lint-ignore-file no-process-globals
+import LoginScreen from "./screen/login.ts";
+import { build } from "./screenbuilder.ts";
 import readline from 'node:readline';
 
 readline.emitKeypressEvents(process.stdin);

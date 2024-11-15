@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any ban-ts-comment
 import { Screen } from "./screen.ts";
 import * as elements from "./elements.ts";
 

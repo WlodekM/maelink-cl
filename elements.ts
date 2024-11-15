@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-case-declarations ban-ts-comment no-process-globals
 import chalk from "chalk";
 import { type Key } from 'node:readline';
 import { type Screen } from "./screen.ts";
@@ -9,12 +10,11 @@ export abstract class Element {
     //@ts-ignore
     screen: Screen;
     abstract render(): void;
-    onkeypres(key: Key): void {};
+    onkeypres(_key: Key): void {};
 }
 
 export class Text extends Element {
     text: string;
-    br: boolean;
 
     processText: (text: string) => string;
 
@@ -47,7 +47,7 @@ export class BR extends Element {
 }
 
 export class Input extends Element {
-    focusable: boolean = true;
+    override focusable: boolean = true;
     value: string = "";
 
     textarea = false;
@@ -62,7 +62,7 @@ export class Input extends Element {
         process.stdout.write(text)
     }
 
-    onkeypres(key: Key): void {
+    override onkeypres(key: Key): void {
         //@ts-ignore
         if (key.meta || key.code || ["return", "backspace"].includes(key.name)) {
             switch (key.name) {
@@ -105,17 +105,18 @@ export class Input extends Element {
 }
 
 export class Button extends Text {
-    focusable: boolean = true;
+    override focusable: boolean = true;
     onclick: ()=>void;
     constructor (text: string, onclick=()=>{}) {
         super(text);
         this.onclick = onclick
     }
-    render(): void {
+
+    override render(): void {
         process.stdout.write(`(${(this.focused ? chalk.bgWhite : (a:string)=>a)(this.text)})`)
     }
 
-    onkeypres(key: Key): void {
+    override onkeypres(key: Key): void {
         //@ts-ignore
         if (["return", "space"].includes(key.name)) {
             this.onclick.call(this.screen)

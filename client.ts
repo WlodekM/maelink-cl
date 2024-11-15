@@ -1,10 +1,11 @@
+// deno-lint-ignore-file no-explicit-any
 
 import { Screen } from "./screen.ts";
 import type { Text } from "./elements.ts";
 import strftime from "./strftime.js";
 
 export let token: string;
-export let account;
+export let account: any;
 export const connection = new WebSocket("wss://api.meower.org/v0/cloudlink?v=1")
 
 export let home: any[] = [];
@@ -52,7 +53,7 @@ export async function loadHome(screen: Screen) {
     screen.render()
 }
 
-export async function sendHome(post:string) {
+export function sendHome(post:string) {
     screen.logs.push("sendHome ran", home.length.toString())
     fetch("https://api.meower.org/home", {
         method: "POST",
