@@ -1,0 +1,51 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger the workflow when a tag starting with 'v' is pushed (e.g., v1.0.0)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Deno
+      uses: denoland/setup-deno@v3
+      with:
+        deno-version: 'v2.0.6'  # specify the version of Deno you want to use
+
+    - name: Make shell script executable
+      run: chmod +x ./buildall.sh
+
+    - name: Run buildall.sh
+      run: ./buildall.sh
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: compressed-files
+        path: build/compressed/*  # Upload the files in the build/compressed directory
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create GitHub Release
+      uses: ghcli/release-action@v1
+      with:
+        tag_name: ${{ github.ref }}  # Use the pushed tag as the release version
+        release_name: Release ${{ github.ref }}
+        body: "Automated release for version ${{ github.ref }}"
+      
+    - name: Upload release assets
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/compressed/*  # Upload the files to the GitHub release
