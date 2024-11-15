@@ -27,14 +27,14 @@ jobs:
     - name: Run buildall.sh
       run: ./buildall.sh
 
-    - name: List contents of build/compressed (debugging step)
-      run: ls -R build/compressed
+    - name: List contents of build directory (debugging step)
+      run: ls -R build  # List contents of build to ensure files are there
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: compressed-files
-        path: build/compressed/*
+        path: build/compressed/*  # Upload the files in the build/compressed directory
 
   release:
     needs: build
@@ -44,32 +44,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: List contents of build/compressed (debugging step)
-      run: ls -R build/compressed  # Double-check the files before uploading
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: compressed-files  # This is the same name you used in the upload-artifact step
 
-    # Step to check if the release already exists
-    - name: Check if release exists
-      id: check_release
-      run: |
-        TAG="${GITHUB_REF##*/}"
-        RELEASE=$(curl -s --header "Authorization: token ${{ secrets.GH_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG")
-        echo "Release: $RELEASE"
-        if [[ "$RELEASE" != "{}" ]]; then
-          echo "Release already exists for tag $TAG"
-          echo "exists=true" >> $GITHUB_ENV
-        else
-          echo "Release does not exist for tag $TAG"
-          echo "exists=false" >> $GITHUB_ENV
+    - name: List contents of downloaded artifacts (debugging step)
+      run: ls -R compressed-files  # List contents of the downloaded artifact folder
 
-    # Conditional step to create release only if it doesn't exist
     - name: Create GitHub Release
-      if: env.exists == 'false'
       uses: softprops/action-gh-release@v1
       with:
-        files: build/compressed/*
+        files: compressed-files/*  # Now use the downloaded artifacts
         tag_name: ${{ github.ref }}
         name: Release ${{ github.ref }}  # Use name instead of release_name
         body: "Automated release for version ${{ github.ref }}"
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # Use the PAT for permissions
