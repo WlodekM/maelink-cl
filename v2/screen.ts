@@ -34,12 +34,12 @@ export class Screen {
             process.exit();
         }
         
-        if (['up', 'left'].includes(key.name)) {
+        if (['up', 'left'].includes(key.name) || key.name == "tab" && key.shift) {
             // logs.push(`Got up key, moving focus upward ${focusedIndex} ${(focusedIndex - 1) % focusableIDs.length}`)
             screen.focus(focusableIDs[(focusedIndex - 1) % focusableIDs.length]);
             return screen.render()
         }
-        if (['down', 'right'].includes(key.name)) {
+        if (['down', 'right'].includes(key.name) || key.name == "tab" && !key.shift) {
             // logs.push(`Got down key, moving focus downward ${focusedIndex} ${(focusedIndex + 1) % focusableIDs.length}`)
             screen.focus(focusableIDs[(focusedIndex + 1) % focusableIDs.length]);
             return screen.render()
