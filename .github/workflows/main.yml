@@ -45,17 +45,18 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: compressed-files  # This is the same name you used in the upload-artifact step
+        path: build
 
     - name: List contents of downloaded artifacts (debugging step)
-      run: ls -R /home/runner/work/meower-cl/  # List contents of the downloaded artifact folder
+      run: ls -R .  # List contents of the downloaded artifact folder
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        files: /home/runner/work/meower-cl/meower-cl/*  # Now use the downloaded artifacts
+        files: build/*  # Now use the downloaded artifacts
         tag_name: ${{ github.ref }}
         name: Release ${{ github.ref }}  # Use name instead of release_name
         body: "Automated release for version ${{ github.ref }}"
