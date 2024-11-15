@@ -45,7 +45,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: build/compressed/*  # Upload the files to the GitHub release
-        tag_name: ${{ github.ref }}  # Use the pushed tag as the release version
+        name: ${{ github.ref }}  # Use the pushed tag as the release version
         release_name: Release ${{ github.ref }}
         body: "Automated release for version ${{ github.ref }}"
       env:
