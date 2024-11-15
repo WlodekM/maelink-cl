@@ -17,6 +17,9 @@ jobs:
       uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31
       with:
         deno-version: 'v2.0.6'  # specify the version of Deno you want to use
+    
+    - name: Install modulesdsafdasf
+      run: deno install
 
     - name: Make shell script executable
       run: chmod +x ./buildall.sh
