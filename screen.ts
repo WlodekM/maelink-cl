@@ -1,8 +1,11 @@
-// deno-lint-ignore-file no-process-globals ban-ts-comment no-explicit-any
+// deno-lint-ignore ban-unused-ignore
+// deno-lint-ignore ban-unused-ignore
+// deno-lint-ignore-file no-process-globals ban-ts-comment no-explicit-any ban-unused-ignore
 // ^ problem solved
 import { Key } from "node:readline";
 import type { Element, Input, Text, Button } from "./elements.ts"
 import { Buffer } from "node:buffer";
+import process from "node:process";
 
 const logs: string[] = [];
 
