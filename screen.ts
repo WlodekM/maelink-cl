@@ -86,7 +86,7 @@ export class Screen {
         console.clear()
         process.stdout.write("\u001b[2J") // use an ansi escape code to clear the screen if console.clear doesn't clear fully
         this.elements.forEach(element => {
-            element.render()
+            element.render();
         });
     }
 
