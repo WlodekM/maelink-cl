@@ -1,6 +1,5 @@
 echo "Welcome to the maelink CL build script"
-git submodule init
-git submodule sync
+git submodule update --init --recursive
 ls .
 echo "--"
 ls -r mljs
