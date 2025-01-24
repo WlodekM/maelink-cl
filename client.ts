@@ -30,7 +30,7 @@ interface Post {
 }
 
 maelink.on('message', (e) => {
-    screen.logs.push("INC: " + e)
+    screen.logs.push("INC: " + JSON.stringify(e))
 })
 
 maelink.on("post", (post: Post) => {
