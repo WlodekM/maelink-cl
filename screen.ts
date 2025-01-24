@@ -10,7 +10,7 @@ import process from "node:process";
 const logs: string[] = [];
 
 function onexit() {
-    // console.clear()
+    console.clear()
     console.log("\nQuitting meower CL")
     for (const log of logs) {
         console.log(log)
@@ -39,7 +39,6 @@ export class Screen {
     handleKeypress(_chunk: Buffer, key: Key, screen: Screen) {
         const focusableIDs = Object.keys(screen.getFocusable());
         const focusedIndex = focusableIDs.indexOf(screen.focusedElementId);
-        // console.debug(this.client.ws.readyState)
         if (key && key.name == 'escape' || key.name == "c" && key.ctrl) {
             onexit();
             Deno.exit(0);
@@ -84,8 +83,6 @@ export class Screen {
     }
 
     render() {
-        // console.debug('render')
-        // return;
         console.clear()
         process.stdout.write("\u001b[2J") // use an ansi escape code to clear the screen if console.clear doesn't clear fully
         this.elements.forEach(element => {

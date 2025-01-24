@@ -7,10 +7,9 @@ import strftime from "./strftime.js";
 export const maelink = new Maelink()
 export let token: string;
 export const connection = maelink.ws
-console.debug('ass')
 
 maelink.ws.onopen = () => {
-    console.debug('open')
+    screen?.logs?.push('open')
 }
 
 export const home: any[] = [];
@@ -19,7 +18,6 @@ let screen: Screen;
 
 export function setScreen(screenN: Screen) {
     screen = screenN
-    // console.log(screen)
 }
 
 interface Post {
@@ -32,18 +30,14 @@ interface Post {
 }
 
 maelink.on('message', (e) => {
-    console.debug(e)
     screen.logs.push("INC: " + e)
 })
 
 maelink.on("post", (post: Post) => {
-    console.debug('assss')
-    screen.logs.push("POST: " + JSON.stringify(post))
+    screen.logs.push("MESSAGE: " + JSON.stringify(post))
     home.push(post);
-    console.debug(post, 'uh', home)
     const textHome: string[] = home.map(p => `[${strftime("%H:%M:%S", new Date(Number(JSON.parse(p.e).t) * 1000))}] ${p.u}: ${p.p}`);
     const homeElem: Text = screen.elements.get("home") as Text;
-    console.debug(homeElem, screen)
     if(homeElem) homeElem.text = textHome.join("\n")+"\n";
     screen.render()        
 })
