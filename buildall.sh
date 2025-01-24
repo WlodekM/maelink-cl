@@ -1,4 +1,4 @@
-echo "Welcome to the meower CL build script"
+echo "Welcome to the maelink CL build script"
 
 echo "removing build folder if there already is a build there"
 
