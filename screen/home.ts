@@ -23,7 +23,8 @@ export default {
                 const termWidth  = process.stdout.columns;
 
                 let splitText = this.text.split("\n");
-                splitText = splitText.map(t => t.replace(new RegExp(`([^]){${termWidth}}`, "g"),"$1\n"));
+                splitText = splitText.map(t => t.replace(new RegExp(`([^]{${termWidth}})`, "g"),"$1\n"));
+                this.screen.logs.push(JSON.stringify(splitText))
                 splitText = splitText.join("\n").split("\n")
 
                 splitText = splitText.slice(-(termHeight - inputValueHeight));
