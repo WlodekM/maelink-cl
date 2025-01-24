@@ -3,6 +3,14 @@ import { Screen } from "../screen.ts";
 import type { Input, Text } from "../elements.ts";
 import process from "node:process";
 
+function changeTitle(title: string) {
+    if (process.platform == 'win32') {
+        process.title = title;
+    } else {
+        process.stdout.write(`\x1b]2;${title}\x1b\x5c`);
+    }
+}
+
 export default {
     elements: [
         {
@@ -49,5 +57,6 @@ export default {
     onload (screen: Screen) {
         screen.client.setScreen(screen)
         screen.client.loadHome(screen)
+        changeTitle(`maelink - home`)
     }
 }

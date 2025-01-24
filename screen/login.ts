@@ -3,6 +3,15 @@ import { Screen } from "../screen.ts";
 import { build } from "../screenbuilder.ts";
 import HomeScreen from "./home.ts";
 import { Input } from "../elements.ts";
+import process from "node:process"
+
+function changeTitle(title: string) {
+    if (process.platform == 'win32') {
+        process.title = title;
+    } else {
+        process.stdout.write(`\x1b]2;${title}\x1b\x5c`);
+    }
+}
 
 export default {
     elements: [
@@ -42,15 +51,20 @@ export default {
                 this.off()
                 this.logs.push(`clicked button`)
                 console.clear()
-                console.log("logging in...")
+                changeTitle('maelink - logging in...')
+                this.logs.push("logging in...")
                 const usernameInput = this.elements.get("username-input") as Input;
                 const passwordInput = this.elements.get("password-input") as Input;
                 await this.client.login(usernameInput.value, passwordInput.value)
+                changeTitle('maelink - logged in as ' + usernameInput.value)
                 build(HomeScreen, this.client);
                 this.client
             }]
         }
     ],
     focus: "username-input",
-    name: 'login'
+    name: 'login',
+    onload() {
+        changeTitle(`maelink - log in`)
+    }
 }
