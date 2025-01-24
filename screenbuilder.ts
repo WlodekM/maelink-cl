@@ -31,8 +31,8 @@ type Data = {
     onload?: (screen: Screen) => any
 }
 
-export function build(data: Data) {
-    const screen = new Screen(data.name);
+export function build(data: Data, client: any) {
+    const screen = new Screen(data.name, client);
     for (const element of data.elements) {
         if (!element.data) element.data = []
         //@ts-ignore
@@ -40,5 +40,6 @@ export function build(data: Data) {
     }
     if (data.focus) screen.focus(data.focus);
     screen.ready()
-    if (data.onload) data.onload(screen)
+    if (data.onload) data.onload(screen);
+    return screen
 }

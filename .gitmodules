@@ -1,0 +1,3 @@
+[submodule "mljs"]
+	path = mljs
+	url = https://github.com/WlodekM/maelink-js.git

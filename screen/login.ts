@@ -1,8 +1,8 @@
 import { ElemType } from "../screenbuilder.ts";
 import { Screen } from "../screen.ts";
-import * as client from "../client.ts"
 import { build } from "../screenbuilder.ts";
 import HomeScreen from "./home.ts";
+import { Input } from "../elements.ts";
 
 export default {
     elements: [
@@ -38,15 +38,16 @@ export default {
             type: ElemType.ButtonElem,
             id: 'done-btn',
             data: ["Done", async function (this: Screen) {
-                client.setScreen(this)
+                this.client.setScreen(this)
                 this.off()
                 this.logs.push(`clicked button`)
                 console.clear()
                 console.log("logging in...")
-                //@ts-ignore
-                await client.login(this.elements.get("username-input").value, this.elements.get("password-input").value)
-                build(HomeScreen);
-                client
+                const usernameInput = this.elements.get("username-input") as Input;
+                const passwordInput = this.elements.get("password-input") as Input;
+                await this.client.login(usernameInput.value, passwordInput.value)
+                build(HomeScreen, this.client);
+                this.client
             }]
         }
     ],
