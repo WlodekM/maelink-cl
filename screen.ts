@@ -6,6 +6,7 @@ import { Key } from "node:readline";
 import type { Element, Input, Text, Button } from "./elements.ts"
 import { Buffer } from "node:buffer";
 import process from "node:process";
+import type { Client } from "./main.ts";
 
 const logs: string[] = [];
 
@@ -22,7 +23,7 @@ export class Screen {
     name: string;
     focusedElementId: string = '';
     logs = logs
-    client;
+    client: Client;
 
     constructor(name: string, client: any) {
         this.name = name;

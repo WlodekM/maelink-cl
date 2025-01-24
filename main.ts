@@ -14,6 +14,8 @@ function changeTitle(title: string) {
 
 readline.emitKeypressEvents(process.stdin);
 
+export type Client = typeof client
+
 if (process.stdin.isTTY) process.stdin.setRawMode(true); // makes the terminal send stdin without the user pressing enter
 
 changeTitle(`maelink`)
