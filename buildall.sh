@@ -2,6 +2,7 @@ echo "Welcome to the maelink CL build script"
 git submodule init
 git submodule sync
 ls .
+echo "--"
 ls -r mljs
 echo "removing build folder if there already is a build there"
 
